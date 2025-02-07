@@ -88,6 +88,8 @@ export type Database = {
       }
       cars: {
         Row: {
+          contact_preference: string | null
+          contact_value: string | null
           created_at: string
           description: string | null
           id: string
@@ -100,6 +102,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          contact_preference?: string | null
+          contact_value?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -112,6 +116,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          contact_preference?: string | null
+          contact_value?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -184,18 +190,21 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          preferred_language: Database["public"]["Enums"]["supported_language"]
           updated_at: string
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           id: string
+          preferred_language?: Database["public"]["Enums"]["supported_language"]
           updated_at?: string
         }
         Update: {
           created_at?: string
           display_name?: string | null
           id?: string
+          preferred_language?: Database["public"]["Enums"]["supported_language"]
           updated_at?: string
         }
         Relationships: []
@@ -408,7 +417,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      supported_language: "es" | "en"
     }
     CompositeTypes: {
       [_ in never]: never
