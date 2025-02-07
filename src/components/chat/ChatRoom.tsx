@@ -20,11 +20,15 @@ interface Message {
   content: string;
 }
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 2000; // 2 seconds
+
 export const ChatRoom = ({ characters }: { characters: Character[] }) => {
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const { toast } = useToast();
 
   const handleCharacterSelect = (character: Character) => {
@@ -40,6 +44,8 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
       });
     }
   };
+
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const generateDiscussion = async () => {
     if (selectedCharacters.length < 2) {
@@ -61,44 +67,65 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
     }
 
     setIsGenerating(true);
+    setRetryCount(0);
 
-    try {
-      // Generate initial prompt for the discussion
-      const initialPrompt = `You are moderating a discussion between ${selectedCharacters.map(c => c.name).join(", ")} about ${selectedTopic}. 
-        Each character should speak in their own voice and perspective, drawing from their historical context and experiences.
-        Generate a natural conversation between these figures, with each taking turns to speak.`;
+    const attemptGeneration = async (attempt: number): Promise<void> => {
+      try {
+        const initialPrompt = `You are moderating a discussion between ${selectedCharacters.map(c => c.name).join(", ")} about ${selectedTopic}. 
+          Each character should speak in their own voice and perspective, drawing from their historical context and experiences.
+          Generate a natural conversation between these figures, with each taking turns to speak.`;
 
-      const { data, error } = await supabase.functions.invoke('generate-with-gemini', {
-        body: { prompt: initialPrompt }
-      });
+        const { data, error } = await supabase.functions.invoke('generate-with-gemini', {
+          body: { prompt: initialPrompt }
+        });
 
-      if (error) throw error;
-
-      if (data?.generatedText) {
-        // Split the generated text into messages and assign to characters
-        const lines = data.generatedText.split('\n').filter(line => line.trim());
-        const newMessages: Message[] = [];
-
-        for (let i = 0; i < lines.length; i++) {
-          const character = selectedCharacters[i % selectedCharacters.length];
-          newMessages.push({
-            character,
-            content: lines[i]
-          });
+        if (error) {
+          if (error.message.includes("503") && attempt < MAX_RETRIES) {
+            toast({
+              title: "API Temporarily Unavailable",
+              description: `Retrying in ${RETRY_DELAY/1000} seconds... (Attempt ${attempt + 1}/${MAX_RETRIES})`,
+              variant: "default",
+            });
+            await delay(RETRY_DELAY);
+            return attemptGeneration(attempt + 1);
+          }
+          throw error;
         }
 
-        setMessages(newMessages);
+        if (data?.generatedText) {
+          const lines = data.generatedText.split('\n').filter(line => line.trim());
+          const newMessages: Message[] = [];
+
+          for (let i = 0; i < lines.length; i++) {
+            const character = selectedCharacters[i % selectedCharacters.length];
+            newMessages.push({
+              character,
+              content: lines[i]
+            });
+          }
+
+          setMessages(newMessages);
+          toast({
+            title: "Discussion Generated",
+            description: "The historical figures have started their conversation.",
+            variant: "default",
+          });
+        }
+      } catch (error) {
+        console.error("Error generating discussion:", error);
+        toast({
+          title: "Error",
+          description: error.message.includes("503") 
+            ? "The AI service is currently overloaded. Please try again in a few minutes."
+            : "Failed to generate discussion. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsGenerating(false);
       }
-    } catch (error) {
-      console.error("Error generating discussion:", error);
-      toast({
-        title: "Error",
-        description: "Failed to generate discussion. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
+    };
+
+    attemptGeneration(0);
   };
 
   return (
