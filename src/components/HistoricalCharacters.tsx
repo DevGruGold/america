@@ -72,6 +72,8 @@ const characters: Character[] = [
   }
 ];
 
+export const characters: Character[] = characters;
+
 export const HistoricalCharacters = () => {
   const { toast } = useToast();
   const [activeCharacter, setActiveCharacter] = useState("johnfkennedy");

@@ -1,8 +1,10 @@
 import { Navigation } from "@/components/Navigation";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { HistoricalCharacters } from "@/components/HistoricalCharacters";
+import { ChatRoom } from "@/components/chat/ChatRoom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { characters } from "@/components/HistoricalCharacters";
 
 interface Artwork {
   id: string;
@@ -74,6 +76,19 @@ const Index = () => {
         {/* Chat Section */}
         <section id="chat-section" className="mb-16">
           <HistoricalCharacters />
+        </section>
+
+        {/* Historical Discussion Room */}
+        <section className="mb-16">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-primary text-center mb-8">
+              Historical Discussion Room
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              Watch historical figures engage in meaningful discussions about important topics.
+            </p>
+            <ChatRoom characters={characters} />
+          </div>
         </section>
 
         {/* Partnership Section */}
