@@ -5,7 +5,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { CharacterTabs } from "./characters/CharacterTabs";
 import { CharacterContent } from "./characters/CharacterContent";
 
-const characters: Character[] = [
+export const characters: Character[] = [
   {
     name: "John F Kennedy",
     role: "35th U.S. President",
@@ -71,8 +71,6 @@ const characters: Character[] = [
     prompt: "Share your perspective on how cultural institutions like the Kennedy Center can advance the cause of human dignity and education. Discuss how the arts can elevate society and promote understanding across racial divides, drawing from your experiences as an abolitionist and champion of human rights. Keep your responses eloquent and powerful, emphasizing the transformative power of education and culture."
   }
 ];
-
-export const characters: Character[] = characters;
 
 export const HistoricalCharacters = () => {
   const { toast } = useToast();
