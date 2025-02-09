@@ -19,8 +19,15 @@ async function fetchHistoricalFigures(): Promise<Character[]> {
   }
 
   return data.map(figure => ({
-    ...figure,
+    id: figure.id,
+    name: figure.name,
+    role: figure.role,
+    nationality: figure.nationality,
+    era: figure.era,
     imageUrl: figure.image_url,
+    description: figure.description,
+    voiceId: figure.voice_id,
+    prompt: figure.prompt
   }));
 }
 
@@ -122,4 +129,12 @@ export const HistoricalCharacters = () => {
       </div>
     </div>
   );
+};
+
+// Export characters query function to be used by other components
+export const useHistoricalFigures = () => {
+  return useQuery({
+    queryKey: ['historical-figures'],
+    queryFn: fetchHistoricalFigures,
+  });
 };
