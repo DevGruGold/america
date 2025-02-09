@@ -9,7 +9,7 @@ export const characters: Character[] = [
   {
     name: "John F Kennedy",
     role: "35th U.S. President",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/800px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg",
     description: "Experience an AI simulation of President Kennedy discussing his vision for the arts and the Kennedy Center.",
     voiceId: "iP95p4xoKVk53GoZ742B",
     prompt: "Share your vision for the arts in America and the importance of the Kennedy Center as a national cultural institution. Emphasize your belief in the power of arts to inspire and unite the nation. Keep your response natural and conversational, focusing on your passion for cultural advancement and the legacy you hope to leave through the Kennedy Center."
@@ -17,7 +17,7 @@ export const characters: Character[] = [
   {
     name: "Martin Luther King Jr.",
     role: "Civil Rights Leader",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Martin_Luther_King%2C_Jr..jpg/800px-Martin_Luther_King%2C_Jr..jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/05/Martin_Luther_King%2C_Jr..jpg",
     description: "Engage with the civil rights leader on the transformative power of arts and culture in promoting equality and justice.",
     voiceId: "XB0fDUnXU5powFXDhCwa",
     prompt: "Share your perspective on how cultural institutions like the Kennedy Center can serve as beacons of unity and progress in our ongoing journey toward equality and justice. Discuss how the arts can bridge divides, inspire change, and help realize your dream of a society where all are judged by the content of their character. Keep your responses passionate and inspiring, drawing from your experience as a leader in the civil rights movement."
@@ -25,7 +25,7 @@ export const characters: Character[] = [
   {
     name: "John Adams",
     role: "2nd U.S. President",
-    imageUrl: "https://storage.googleapis.com/pai-images/2024-03-19/1710823200/1710823200.jpg",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Gilbert_Stuart%2C_John_Adams%2C_c._1800-1815%2C_NGA_42933.jpg/800px-Gilbert_Stuart%2C_John_Adams%2C_c._1800-1815%2C_NGA_42933.jpg",
     description: "Engage with the founding father on the importance of education, arts, and cultural development in a young republic.",
     voiceId: "TX3LPaxmHKxFdv7VOQHJ",
     prompt: "Share your perspective on how institutions like the Kennedy Center embody your vision of promoting education and the arts in our republic. Discuss how cultural advancement strengthens democracy and enlightens citizens, drawing from your experience as a diplomat and advocate for education. Keep your responses thoughtful and philosophical, emphasizing the connection between cultural institutions and the preservation of liberty."

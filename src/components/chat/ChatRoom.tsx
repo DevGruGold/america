@@ -12,7 +12,15 @@ const topics = [
   "National Unity and Cultural Heritage",
   "Education and Social Progress",
   "Leadership in Times of Change",
-  "Justice and Equality"
+  "Justice and Equality",
+  "Civil Rights and Social Justice",
+  "The Future of American Culture",
+  "Innovation and Progress",
+  "Constitutional Values",
+  "Public Service and Civic Duty",
+  "War and Peace",
+  "Economic Prosperity",
+  "Environmental Stewardship"
 ];
 
 interface Message {
@@ -157,12 +165,16 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-2">Select Topic</h3>
           <Select onValueChange={setSelectedTopic}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full bg-white border-gray-200">
               <SelectValue placeholder="Choose a topic for discussion" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white border border-gray-200 shadow-lg">
               {topics.map((topic) => (
-                <SelectItem key={topic} value={topic}>
+                <SelectItem 
+                  key={topic} 
+                  value={topic}
+                  className="hover:bg-gray-100"
+                >
                   {topic}
                 </SelectItem>
               ))}

@@ -9,7 +9,104 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      artworks: {
+        Row: {
+          created_at: string
+          creator_id: string | null
+          description: string | null
+          id: string
+          image_url: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          id?: string
+          image_url: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      tokens: {
+        Row: {
+          artwork_id: string
+          blockchain_status: string
+          contract_address: string
+          created_at: string
+          id: string
+          owner_id: string | null
+          token_metadata: Json | null
+          token_uri: string
+          transaction_hash: string | null
+          updated_at: string
+        }
+        Insert: {
+          artwork_id: string
+          blockchain_status?: string
+          contract_address: string
+          created_at?: string
+          id?: string
+          owner_id?: string | null
+          token_metadata?: Json | null
+          token_uri: string
+          transaction_hash?: string | null
+          updated_at?: string
+        }
+        Update: {
+          artwork_id?: string
+          blockchain_status?: string
+          contract_address?: string
+          created_at?: string
+          id?: string
+          owner_id?: string | null
+          token_metadata?: Json | null
+          token_uri?: string
+          transaction_hash?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tokens_artwork_id_fkey"
+            columns: ["artwork_id"]
+            isOneToOne: false
+            referencedRelation: "artworks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
