@@ -1,3 +1,4 @@
+
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,13 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ArtworkCard } from "@/components/ArtworkCard";
 
+interface Token {
+  id: string;
+  blockchain_status: string;
+}
+
 interface Artwork {
   id: string;
   title: string;
   description: string;
   image_url: string;
   created_at: string;
-  token_id: string | null;
+  tokens?: Token[];
 }
 
 const Profile = () => {
@@ -96,9 +102,9 @@ const Profile = () => {
                         title={artwork.title}
                         artist={userEmail || "Anonymous"}
                         imageUrl={artwork.image_url}
-                        status={artwork.token_id ? "Tokenized" : undefined}
+                        status={artwork.tokens && artwork.tokens[0]?.blockchain_status}
                         showTokenize={true}
-                        onTokenize={handleTokenize}
+                        onTokenize={() => handleTokenize(artwork.id)}
                       />
                     ))}
                   </div>

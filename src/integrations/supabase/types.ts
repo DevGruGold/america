@@ -102,6 +102,27 @@ export type Database = {
         }
         Relationships: []
       }
+      secrets: {
+        Row: {
+          created_at: string
+          id: string
+          key_name: string
+          key_value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_name: string
+          key_value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_name?: string
+          key_value?: string
+        }
+        Relationships: []
+      }
       tokens: {
         Row: {
           artwork_id: string

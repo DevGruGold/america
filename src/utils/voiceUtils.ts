@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 export const startVoiceRecognition = (
@@ -23,20 +24,20 @@ export const startVoiceRecognition = (
 
 export const playWithElevenLabs = async (text: string) => {
   try {
-    const { data: secrets } = await supabase
+    const { data: secrets, error } = await supabase
       .from('secrets')
       .select('key_value')
       .eq('key_name', 'ELEVEN_LABS_API_KEY')
-      .maybeSingle();
+      .single();
     
-    if (!secrets?.key_value) {
+    if (error || !secrets?.key_value) {
       throw new Error("ElevenLabs API key not found");
     }
 
     const VOICE_ID = "iP95p4xoKVk53GoZ742B"; // Chris's voice for JFK
     
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream/with-timestamps`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream`,
       {
         method: "POST",
         headers: {
