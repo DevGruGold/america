@@ -1,3 +1,4 @@
+
 import { Navigation } from "@/components/Navigation";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { HistoricalCharacters } from "@/components/HistoricalCharacters";
@@ -65,9 +66,9 @@ const Index = () => {
             </div>
             <div className="hidden md:block">
               <img 
-                src="/placeholder.svg" 
-                alt="Kennedy Center Digital Arts"
-                className="w-full max-w-lg mx-auto rounded-lg shadow-lg"
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg" 
+                alt="President John F. Kennedy official portrait"
+                className="w-full max-w-lg mx-auto rounded-lg shadow-lg object-cover h-[500px]"
               />
             </div>
           </div>
