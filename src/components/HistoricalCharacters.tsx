@@ -8,6 +8,8 @@ import { CharacterContent } from "./characters/CharacterContent";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
+const FEATURED_CHARACTERS = ["John F. Kennedy", "Frederick Douglass", "Abraham Lincoln"];
+
 async function fetchHistoricalFigures(): Promise<Character[]> {
   const { data, error } = await supabase
     .from('historical_figures')
@@ -18,7 +20,8 @@ async function fetchHistoricalFigures(): Promise<Character[]> {
     throw new Error('Failed to fetch historical figures');
   }
 
-  return data.map(figure => ({
+  // Organize characters: featured ones first, then others
+  const characters = data.map(figure => ({
     id: figure.id,
     name: figure.name,
     role: figure.role,
@@ -29,6 +32,15 @@ async function fetchHistoricalFigures(): Promise<Character[]> {
     voiceId: figure.voice_id,
     prompt: figure.prompt
   }));
+
+  // Sort so featured characters appear first
+  return characters.sort((a, b) => {
+    const aFeatured = FEATURED_CHARACTERS.includes(a.name);
+    const bFeatured = FEATURED_CHARACTERS.includes(b.name);
+    if (aFeatured && !bFeatured) return -1;
+    if (!aFeatured && bFeatured) return 1;
+    return a.name.localeCompare(b.name);
+  });
 }
 
 export const HistoricalCharacters = () => {
@@ -51,8 +63,8 @@ export const HistoricalCharacters = () => {
   useEffect(() => {
     if (!isLoading && !error) {
       toast({
-        title: "AI Models Ready",
-        description: "The historical figure simulations are ready for interaction.",
+        title: "Historical Figures Ready",
+        description: "Featured figures and additional historical personalities are ready for interaction.",
         variant: "default",
       });
     }
@@ -91,6 +103,9 @@ export const HistoricalCharacters = () => {
     );
   }
 
+  const featuredCharacters = characters.filter(char => FEATURED_CHARACTERS.includes(char.name));
+  const otherCharacters = characters.filter(char => !FEATURED_CHARACTERS.includes(char.name));
+
   return (
     <div className="py-12 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
@@ -106,15 +121,35 @@ export const HistoricalCharacters = () => {
           </p>
         </div>
         
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {featuredCharacters.map((character) => (
+            <div key={character.name} className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold mb-4">{character.name}</h3>
+              <div className="flex items-center gap-4">
+                <img 
+                  src={character.imageUrl} 
+                  alt={character.name}
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+                <div>
+                  <p className="text-gray-600 mb-2">{character.role}</p>
+                  <p className="text-sm text-gray-500">{character.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className="bg-white rounded-xl shadow-xl p-6 md:p-8">
+          <h3 className="text-2xl font-semibold mb-6">Additional Historical Figures</h3>
           <Tabs 
             defaultValue={characters[0]?.name.toLowerCase().replace(/\s+/g, '')} 
             className="w-full" 
             onValueChange={setActiveCharacter}
           >
-            <CharacterTabs characters={characters} />
+            <CharacterTabs characters={otherCharacters} />
             <div className="mt-8">
-              {characters.map((character) => (
+              {otherCharacters.map((character) => (
                 <CharacterContent
                   key={character.name.toLowerCase().replace(/\s+/g, '')}
                   character={character}
