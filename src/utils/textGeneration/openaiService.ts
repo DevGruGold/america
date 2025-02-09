@@ -1,15 +1,14 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 export const generateWithOpenAI = async (prompt: string): Promise<string> => {
   try {
-    const { data: secretData, error } = await supabase
+    const { data: secretData } = await supabase
       .from('secrets')
       .select('key_value')
       .eq('key_name', 'OPENAI_API_KEY')
-      .single();
+      .maybeSingle();
 
-    if (error || !secretData) {
+    if (!secretData) {
       throw new Error('OpenAI API key not found');
     }
 

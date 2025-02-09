@@ -1,10 +1,6 @@
-
 export interface Character {
-  id?: string;
   name: string;
   role: string;
-  nationality?: string;
-  era?: string;
   imageUrl: string;
   description: string;
   voiceId: string;

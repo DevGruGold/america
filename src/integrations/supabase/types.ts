@@ -60,69 +60,6 @@ export type Database = {
         }
         Relationships: []
       }
-      historical_figures: {
-        Row: {
-          created_at: string
-          description: string
-          era: string
-          id: string
-          image_url: string
-          name: string
-          nationality: string
-          prompt: string
-          role: string
-          updated_at: string
-          voice_id: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          era: string
-          id?: string
-          image_url: string
-          name: string
-          nationality: string
-          prompt: string
-          role: string
-          updated_at?: string
-          voice_id: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          era?: string
-          id?: string
-          image_url?: string
-          name?: string
-          nationality?: string
-          prompt?: string
-          role?: string
-          updated_at?: string
-          voice_id?: string
-        }
-        Relationships: []
-      }
-      secrets: {
-        Row: {
-          created_at: string
-          id: string
-          key_name: string
-          key_value: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          key_name: string
-          key_value: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          key_name?: string
-          key_value?: string
-        }
-        Relationships: []
-      }
       tokens: {
         Row: {
           artwork_id: string

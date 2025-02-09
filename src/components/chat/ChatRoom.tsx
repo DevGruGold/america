@@ -20,19 +20,7 @@ const topics = [
   "Public Service and Civic Duty",
   "War and Peace",
   "Economic Prosperity",
-  "Environmental Stewardship",
-  "Philosophy and Governance",
-  "Religious Freedom and Tolerance",
-  "Social Contract Theory",
-  "Natural Rights and Liberty",
-  "Freedom of Expression",
-  "Civic Virtue and Democracy",
-  "International Cooperation",
-  "Cultural Exchange and Understanding",
-  "Scientific Progress and Society",
-  "Women's Rights and Equality",
-  "Labor Rights and Reform",
-  "Educational Reform"
+  "Environmental Stewardship"
 ];
 
 interface Message {

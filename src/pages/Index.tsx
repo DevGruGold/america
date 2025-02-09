@@ -1,10 +1,11 @@
 
 import { Navigation } from "@/components/Navigation";
 import { ArtworkCard } from "@/components/ArtworkCard";
-import { HistoricalCharacters, useHistoricalFigures } from "@/components/HistoricalCharacters";
+import { HistoricalCharacters } from "@/components/HistoricalCharacters";
 import { ChatRoom } from "@/components/chat/ChatRoom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { characters } from "@/components/HistoricalCharacters";
 
 interface Artwork {
   id: string;
@@ -14,8 +15,6 @@ interface Artwork {
 }
 
 const Index = () => {
-  const { data: characters = [] } = useHistoricalFigures();
-  
   const { data: artworks } = useQuery({
     queryKey: ['artworks'],
     queryFn: async () => {
