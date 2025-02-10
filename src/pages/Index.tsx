@@ -40,7 +40,7 @@ const Index = () => {
       
       <main className="container mx-auto px-4">
         {/* Hero Section with Chat */}
-        <section className="py-8 md:py-12">
+        <section className="py-4 md:py-6">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
               <h1 className="font-heading text-3xl md:text-5xl font-bold text-primary mb-4 animate-fade-in">
