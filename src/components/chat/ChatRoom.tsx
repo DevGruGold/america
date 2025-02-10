@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Character } from "@/types/historical";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ const RETRY_DELAY = 2000; // 2 seconds
 
 export const ChatRoom = ({ characters }: { characters: Character[] }) => {
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
+  const [moderator, setModerator] = useState<Character | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -42,6 +44,9 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
   const handleCharacterSelect = (character: Character) => {
     if (selectedCharacters.includes(character)) {
       setSelectedCharacters(prev => prev.filter(c => c !== character));
+      if (moderator === character) {
+        setModerator(null);
+      }
     } else if (selectedCharacters.length < 3) {
       setSelectedCharacters(prev => [...prev, character]);
     } else {
@@ -74,14 +79,24 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
       return;
     }
 
+    if (!moderator) {
+      toast({
+        title: "No moderator selected",
+        description: "Please select a moderator for the discussion.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     setRetryCount(0);
 
     const attemptGeneration = async (attempt: number): Promise<void> => {
       try {
         const initialPrompt = `You are moderating a discussion between ${selectedCharacters.map(c => c.name).join(", ")} about ${selectedTopic}. 
+          ${moderator.name} is the moderator of this discussion.
           Each character should speak in their own voice and perspective, drawing from their historical context and experiences.
-          Generate a natural conversation between these figures, with each taking turns to speak.`;
+          Generate a natural conversation between these figures, with ${moderator.name} guiding the discussion.`;
 
         const { data, error } = await supabase.functions.invoke('generate-with-gemini', {
           body: { prompt: initialPrompt }
@@ -162,6 +177,41 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
           </div>
         </div>
 
+        {selectedCharacters.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">Select Moderator</h3>
+            <Select 
+              value={moderator?.name || ''} 
+              onValueChange={(value) => {
+                const selected = selectedCharacters.find(c => c.name === value);
+                setModerator(selected || null);
+              }}
+            >
+              <SelectTrigger className="w-full bg-white border-gray-200">
+                <SelectValue placeholder="Choose a moderator for the discussion" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg">
+                {selectedCharacters.map((character) => (
+                  <SelectItem 
+                    key={character.name} 
+                    value={character.name}
+                    className="hover:bg-gray-100"
+                  >
+                    <div className="flex items-center gap-2">
+                      <img 
+                        src={character.imageUrl} 
+                        alt={character.name} 
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      {character.name}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-2">Select Topic</h3>
           <Select onValueChange={setSelectedTopic}>
@@ -184,7 +234,7 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
 
         <Button 
           onClick={generateDiscussion} 
-          disabled={isGenerating || selectedCharacters.length < 2 || !selectedTopic}
+          disabled={isGenerating || selectedCharacters.length < 2 || !selectedTopic || !moderator}
           className="w-full"
         >
           {isGenerating ? "Generating Discussion..." : "Start Discussion"}
@@ -200,7 +250,12 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
                 alt={message.character.name} 
                 className="w-8 h-8 rounded-full object-cover"
               />
-              <span className="font-semibold">{message.character.name}</span>
+              <span className="font-semibold">
+                {message.character.name}
+                {message.character === moderator && (
+                  <span className="text-sm text-gray-500 ml-2">(Moderator)</span>
+                )}
+              </span>
             </div>
             <div className="pl-10">
               <p className="text-gray-700">{message.content}</p>
