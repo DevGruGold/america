@@ -47,12 +47,12 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
       if (moderator === character) {
         setModerator(null);
       }
-    } else if (selectedCharacters.length < 3) {
+    } else if (selectedCharacters.length < 4) {  // Changed from 3 to 4
       setSelectedCharacters(prev => [...prev, character]);
     } else {
       toast({
         title: "Maximum characters reached",
-        description: "You can select up to 3 characters for the discussion.",
+        description: "You can select up to 4 characters for the discussion.",  // Updated message
         variant: "destructive",
       });
     }
@@ -157,7 +157,7 @@ export const ChatRoom = ({ characters }: { characters: Character[] }) => {
         <h2 className="text-2xl font-bold text-primary mb-4">Historical Discussion Room</h2>
         
         <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Select Characters (2-3)</h3>
+          <h3 className="text-lg font-semibold mb-2">Select Characters (2-4)</h3>  {/* Updated text */}
           <div className="flex flex-wrap gap-2">
             {characters.map((character) => (
               <Button
