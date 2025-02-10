@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -18,35 +19,8 @@ serve(async (req) => {
       throw new Error('Gemini API key not found in environment variables');
     }
 
-    const { prompt, history } = await req.json();
+    const { prompt } = await req.json();
     console.log('Received prompt:', prompt);
-    console.log('Received history:', history);
-
-    // Convert history to Gemini format
-    const contents = history ? [...history] : [];
-    
-    // Add system instruction for John Adams
-    if (contents.length === 0) {
-      contents.push({
-        role: "model",
-        parts: [{ text: "I am John Adams, the second President of the United States, a founding father, and a passionate advocate for education, justice, and the arts. I shall respond with the intellectual rigor and principled manner that defined my character during my service to our young nation." }]
-      });
-    }
-    
-    contents.push({
-      role: "user",
-      parts: [{ text: prompt }]
-    });
-
-    const requestBody = {
-      contents,
-      generationConfig: {
-        temperature: 1,
-        topP: 0.95,
-        topK: 40,
-        maxOutputTokens: 8192,
-      },
-    };
 
     console.log('Sending request to Gemini API...');
     
@@ -57,7 +31,19 @@ serve(async (req) => {
           'Content-Type': 'application/json',
           'x-goog-api-key': apiKey,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
+            temperature: 1,
+            topP: 0.95,
+            topK: 40,
+            maxOutputTokens: 8192,
+          },
+        }),
       }
     );
 
